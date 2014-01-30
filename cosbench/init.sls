@@ -1,6 +1,7 @@
 
-{% set version = salt['pillar.get']('cosbench:version', '0.4.0.a1') %}
-{% set package = salt['pillar.get']('cosbench:package', 'https://github.com/intel-cloud/cosbench/releases/download/v0.4.0.a1/0.4.0.a1.zip') %}
+{% set version = salt['pillar.get']('cosbench:package:version', '0.4.0.a1') %}
+{% set source = salt['pillar.get']('cosbench:package:source', 'https://github.com/intel-cloud/cosbench/releases/download/v0.4.0.a1/0.4.0.a1.zip') %}
+{% set hash = salt['pillar.get']('cosbench:package:sha1', '34d1702e6b20281ae704f7d2cb706427ae550cbf') %}
 
 java-1.7.0-openjdk:
   pkg.installed
@@ -14,7 +15,8 @@ cosbench:
 /home/cosbench/{{version}}.zip:
   file:
     - managed
-    - source: {{ package }}
+    - source: {{ source }}
+    - source_hash: sha1={{ hash }}
     - require:
       - user: cosbench
 
