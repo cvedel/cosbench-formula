@@ -1,0 +1,7 @@
+
+cosbench:
+  identfier: {{ grains['host'] }}
+  version: 0.4.0.a1
+  package: https://github.com/intel-cloud/cosbench/releases/download/v0.4.0.a1/0.4.0.a1.zip
+  interface: eth0
+
