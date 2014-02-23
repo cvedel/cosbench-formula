@@ -9,6 +9,9 @@ java-1.7.0-openjdk:
 curl:
   pkg.installed
 
+unzip:
+  pkg.installed
+
 cosbench:
   user.present
 
@@ -28,6 +31,7 @@ cosbench:
     - unless: test -d /home/cosbench/{{version}}
     - require:
       - file: /home/cosbench/{{version}}.zip
+      - pkg: unzip
   file.directory:
     - user: cosbench
     - group: cosbench
