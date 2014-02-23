@@ -12,6 +12,9 @@ curl:
 unzip:
   pkg.installed
 
+nc:
+  pkg.installed
+
 cosbench:
   user.present
 
@@ -61,5 +64,6 @@ fix-tools-param:
     - mode: 0755
     - require:
       - file: /home/cosbench/cos
+      - pkg: nc
 {% endfor %}
 
