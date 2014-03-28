@@ -2,6 +2,8 @@
 include:
   - cosbench
 
+{%- set group = salt['pillar.get']('cosbench:group', 'default') %}
+
 stop-cosbench-controller:
   cmd.wait:
     - name: ./stop-controller.sh
@@ -20,6 +22,7 @@ cosbench-controller:
     - context:
         drivers:
 {%- for host, hostinfo in salt['mine.get']('*', 'grains.items').items() %}
+{%- if hostinfo.has_key('cosbench_group') and hostinfo['cosbench_group'] == group %}
 {%- if hostinfo.has_key('cosbench_driver_url') %}
 {%- if hostinfo.has_key('cosbench_driver_identifier') %}
           -
@@ -29,6 +32,7 @@ cosbench-controller:
           -
             - driver{{ loop.index }}
             - {{ hostinfo['cosbench_driver_url'] }}
+{%- endif %}
 {%- endif %}
 {%- endif %}
 {%- endfor %}

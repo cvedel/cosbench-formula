@@ -6,6 +6,7 @@ include:
 {%- set ip = salt['network.ip_addrs'](interface=interface)[0] %}
 {%- set url = 'http://' + ip + ':18088/driver' %}
 {%- set identifier = salt['pillar.get']('cosbench:identifier', grains['host']) %}
+{%- set group = salt['pillar.get']('cosbench:group', 'default') %}
 
 stop-cosbench-driver:
   cmd.wait:
@@ -45,3 +46,9 @@ cosbench-driver-identifier:
     # set a grain for this driver's identifier so it can be mined by the controller
     - name: cosbench_driver_identifier
     - value: {{ identifier }}
+
+cosbench-group:
+  grains.present:
+    # set a grain for this driver's identifier so it can be mined by the controller
+    - name: cosbench_group
+    - value: {{ group }}

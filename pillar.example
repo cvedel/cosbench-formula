@@ -6,4 +6,5 @@ cosbench:
     source: https://github.com/intel-cloud/cosbench/releases/download/v0.4.0.a1/0.4.0.a1.zip
     sha1: 34d1702e6b20281ae704f7d2cb706427ae550cbf
   interface: eth0
+  group: default
 
