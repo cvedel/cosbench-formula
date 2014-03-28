@@ -13,6 +13,13 @@ stop-cosbench-controller:
     - watch:
       - file: /home/cosbench/cos/conf/controller.conf
       
+/home/cosbench/cos/conf/cosbench-users.xml:
+  file.managed:
+    - source: salt://cosbench/cosbench-users.xml
+    - template: jinja
+    - user: cosbench
+    - mode: 600
+
 cosbench-controller:
   file.managed:
     - name: /home/cosbench/cos/conf/controller.conf
@@ -45,4 +52,5 @@ cosbench-controller:
     - unless: nc -z localhost 19088
     - require:
       - file: /home/cosbench/cos/conf/controller.conf
+      - file: /home/cosbench/cos/conf/cosbench-users.xml
 

@@ -7,4 +7,8 @@ cosbench:
     sha1: 34d1702e6b20281ae704f7d2cb706427ae550cbf
   interface: eth0
   group: default
+  controller:
+    console:
+      username: anonymous
+      password: cosbench
 
