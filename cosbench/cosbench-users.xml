@@ -1,5 +1,5 @@
-{%- set username = salt['pillar.get']('cosbench:controller:console:username', 'anonymous') %}
-{%- set password = salt['pillar.get']('cosbench:controller:console:password', 'cosbench') %}
+{%- set username = salt['pillar.get']('cosbench:controller:console:username', 'anonymous') -%}
+{%- set password = salt['pillar.get']('cosbench:controller:console:password', 'cosbench') -%}
 <?xml version='1.0' encoding='utf-8'?>
 <tomcat-users>
   <role rolename="cosbench"/>
