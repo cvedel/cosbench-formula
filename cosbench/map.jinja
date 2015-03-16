@@ -1,0 +1,13 @@
+{% set cosbench = salt['grains.filter_by']({
+    'default': {
+    },
+    'Debian': {
+        'jdk': 'openjdk-7-jdk',
+        'netcat': 'netcat'
+    },
+    'RedHat': {
+        'jdk': 'java-1.7.0-openjdk',
+        'netcat': 'nc'
+    }
+},
+merge=salt['pillar.get']('cosbench:lookup'), default='default') %}

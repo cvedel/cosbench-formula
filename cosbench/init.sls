@@ -1,40 +1,34 @@
 
+{% from "cosbench/map.jinja" import cosbench with context %}
+
 {% set version = salt['pillar.get']('cosbench:package:version', '0.4.0.a1') %}
 {% set source = salt['pillar.get']('cosbench:package:source', 'https://github.com/intel-cloud/cosbench/releases/download/v0.4.0.a1/0.4.0.a1.zip') %}
 {% set hash = salt['pillar.get']('cosbench:package:sha1', '34d1702e6b20281ae704f7d2cb706427ae550cbf') %}
 
-java-1.7.0-openjdk:
-  pkg.installed
+install pre requisites:
+  pkg.installed:
+    - pkgs:
+      - {{ cosbench.jdk }}
+      - {{ cosbench.netcat }}
+      - curl
+      - unzip
 
-curl:
-  pkg.installed
-
-unzip:
-  pkg.installed
-
-nc:
-  pkg.installed
-
-cosbench:
-  user.present
-
-/home/cosbench/{{version}}.zip:
-  file:
-    - managed
-    - source: {{ source }}
-    - source_hash: sha1={{ hash }}
-    - require:
-      - user: cosbench
+create cosbench user:
+  user.present:
+    - name: cosbench
 
 /home/cosbench/{{version}}:
-  cmd:
-    - run
-    - name: unzip /home/cosbench/{{version}}.zip
-    - cwd: /home/cosbench
-    - unless: test -d /home/cosbench/{{version}}
+  archive.extracted:
+    - name: /home/cosbench
+    - source: {{ source }}
+    - source_hash: sha1={{ hash }}
+    - archive_format: zip
+    - user: cosbench
+    - group: cosbench
+    - if_missing: /home/cosbench/{{version}}
+    - keep: True
     - require:
-      - file: /home/cosbench/{{version}}.zip
-      - pkg: unzip
+      - user: create cosbench user
   file.directory:
     - user: cosbench
     - group: cosbench
@@ -42,14 +36,17 @@ cosbench:
       - user
       - group
     - require:
-      - cmd: /home/cosbench/{{version}}
+      - archive: /home/cosbench/{{version}}
 
 /home/cosbench/cos:
   file.symlink:
     - target: /home/cosbench/{{version}}
+    - user: cosbench
+    - group: cosbench
     - require:
-      - cmd: /home/cosbench/{{version}}
+      - archive: /home/cosbench/{{version}}
 
+{% if grains['os_family'] == 'RedHat' %}
 # option -q does not exist for CentOS nc
 fix-tools-param:
   file.comment:
@@ -57,13 +54,15 @@ fix-tools-param:
     - regex: ^TOOL_PARAMS=
     - require:
       - file: /home/cosbench/cos
+{% endif %}
 
 {% for script in ['cli.sh', 'start-all.sh', 'stop-all.sh', 'start-controller.sh', 'stop-controller.sh', 'start-driver.sh', 'stop-driver.sh', 'cosbench-start.sh', 'cosbench-stop.sh'] %}
 /home/cosbench/cos/{{script}}:
   file.managed:
+    - replace: False
     - mode: 0755
     - require:
       - file: /home/cosbench/cos
-      - pkg: nc
+      - pkg: install pre requisites
 {% endfor %}
 
