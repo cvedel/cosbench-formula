@@ -2,9 +2,9 @@
 cosbench:
   identifier: {{ grains['host'] }}
   package: 
-    version: 0.4.0.a1
-    source: https://github.com/intel-cloud/cosbench/releases/download/v0.4.0.a1/0.4.0.a1.zip
-    sha1: 34d1702e6b20281ae704f7d2cb706427ae550cbf
+    version: 0.4.1.0
+    source: https://github.com/intel-cloud/cosbench/releases/download/v0.4.1.0/0.4.1.0.zip
+    sha1: 8355d1f384ec22fd85a59be2d368da618148100f
   interface: eth0
   group: default
   controller:

@@ -28,6 +28,7 @@ cosbench-controller:
     - template: jinja
     - user: cosbench
     - context:
+        identifier: {{ grains['id'] }}
         drivers:
 {%- for host, hostinfo in salt['mine.get']('*', 'grains.items').items() %}
 {%- if hostinfo.has_key('cosbench_group') and hostinfo['cosbench_group'] == group %}
