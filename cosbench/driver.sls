@@ -52,3 +52,12 @@ cosbench-group:
     # set a grain for this driver's identifier so it can be mined by the controller
     - name: cosbench_group
     - value: {{ group }}
+
+update mine for cosbench:
+  module.wait:
+    - name: mine.send
+    - func: grains.items
+    - watch:
+      - grains: cosbench-driver
+      - grains: cosbench-driver-identifier
+      - grains: cosbench-group
